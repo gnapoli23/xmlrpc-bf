@@ -22,10 +22,10 @@ pub struct CmdArgs {
 }
 
 fn parse_args() -> Result<CmdArgs, errors::Error> {
-    Ok(CmdArgs::try_parse().map_err(|e| {
+    CmdArgs::try_parse().map_err(|e| {
         error!("Unable to parse command line arguments");
         Error::UnableToParseArgs(e)
-    })?)
+    })
 }
 
 pub fn main() -> Result<(), Error> {
