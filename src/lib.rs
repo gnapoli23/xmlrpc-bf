@@ -7,11 +7,17 @@ use tracing::error;
 #[derive(Parser, Debug)]
 #[clap(author, version, about)]
 pub struct CmdArgs {
+    #[clap(short, long)]
     pub username: String,
+    #[clap(short, long)]
     pub dictionary: String,
+    #[clap(short, long)]
     pub xml_url: String,
+    #[clap(short, long)]
     pub threads_num: Option<u8>,
+    #[clap(short, long)]
     pub calls_num: Option<u8>,
+    #[clap(short, long)]
     pub debug_mode: Option<bool>,
 }
 

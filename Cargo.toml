@@ -2,6 +2,8 @@
 name = "xmlrpc-bf"
 version = "0.1.0"
 edition = "2021"
+description = "A multi-threaded brute force tool to execute XMLRPC API attacks"
+authors = ["gnapoli.dev@gmail.com"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
