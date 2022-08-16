@@ -1,11 +1,13 @@
 use std::fmt::Display;
 
-
+#[derive(Debug)]
 pub enum Error<'a> {
-    UnableToParseArg(&'a str), // Generic error to handle every cli args error
+    UnableToParseArg(&'a str),
     PathDoesNotExist(&'a str),
     UnableToParseUrl(&'a str)
 }
+
+impl<'a> std::error::Error for Error<'a> {}
 
 impl<'a> Display for Error<'a> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
