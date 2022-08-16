@@ -1,20 +1,28 @@
 use std::fmt::Display;
 
 
-pub enum Error {
-    UnableToParseArgs(clap::Error), // Generic error to handle every cli args error
+pub enum Error<'a> {
+    UnableToParseArg(&'a str), // Generic error to handle every cli args error
+    PathDoesNotExist,
 }
 
-impl Display for Error {
+impl<'a> Display for Error<'a> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match &self {
-            Error::UnableToParseArgs(e) => write!(f, "Unable to parse command line arguments: {:?}", e),
+        match self {
+            Error::UnableToParseArg(arg) => write!(f, "Unable to parse command line argument: {:?}", arg),
+            Error::PathDoesNotExist => write!(f, "File path does not exist"),
         }
     }
 }
 
-impl From<clap::Error> for Error {
-    fn from(e: clap::Error) -> Self {
-        Error::UnableToParseArgs(e)
+impl<'a> From<&'a str> for Error<'a> {
+    fn from(arg: &'a str) -> Self {
+        Error::UnableToParseArg(arg)
+    }
+}
+
+impl<'a> From<Error<'a>> for String {
+    fn from(e: Error) -> Self {
+        e.to_string()
     }
 }

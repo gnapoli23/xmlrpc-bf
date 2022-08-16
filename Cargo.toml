@@ -8,6 +8,5 @@ authors = ["gnapoli.dev@gmail.com"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tracing = "0.1.36"
 clap = { version = "3.2.5", features = ["derive"] }
 
