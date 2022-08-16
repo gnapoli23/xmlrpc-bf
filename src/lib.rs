@@ -42,7 +42,7 @@ fn parse_dictionary_path(dictionary_arg: &str) -> Result<String, String> {
             if exst {
                 Ok(dictionary_arg.into())
             } else {
-                Err(format!("Path '{}' does not exist", dictionary_arg))
+                Err(Error::PathDoesNotExist(dictionary_arg).into())
             }
         })
         .map_err(|_| Error::UnableToParseArg(dictionary_arg))?
