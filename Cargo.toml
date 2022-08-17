@@ -10,4 +10,5 @@ authors = ["gnapoli.dev@gmail.com"]
 [dependencies]
 clap = { version = "3.2.5", features = ["derive"] }
 url = "2.2.2"
-
+#xmlrpc = "0.15.1"
+xmlrpc = {path = "../xml-rpc-rs"}

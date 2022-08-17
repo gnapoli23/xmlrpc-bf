@@ -1,31 +1,41 @@
 use std::fmt::Display;
 
 #[derive(Debug)]
-pub enum Error<'a> {
-    UnableToParseArg(&'a str),
-    PathDoesNotExist(&'a str),
-    UnableToParseUrl(&'a str)
+pub enum Error {
+    UnableToParseArg(String),
+    PathDoesNotExist(String),
+    UnableToReadFile(std::io::Error),
+    UnableToReadLine(std::io::Error),
+    UnableToParseUrl(String),
+    UnableToPerformRequest(xmlrpc::Error),
+    GenericError,
 }
 
-impl<'a> std::error::Error for Error<'a> {}
+impl std::error::Error for Error {}
 
-impl<'a> Display for Error<'a> {
+impl Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
-            Error::UnableToParseArg(arg) => write!(f, "Unable to parse {:?} command line argument", arg),
+            Error::UnableToParseArg(arg) => {
+                write!(f, "Unable to parse {:?} command line argument", arg)
+            }
             Error::PathDoesNotExist(arg) => write!(f, "File path {:?} does not exist", arg),
-            Error::UnableToParseUrl(arg) => write!(f, "Unable to parse {:?} as url", arg)
+            Error::UnableToReadFile(e) => write!(f, "Unable to read file: {:?}", e),
+            Error::UnableToReadLine(e) => write!(f, "Unable to read line: {:?}", e),
+            Error::UnableToParseUrl(arg) => write!(f, "Unable to parse {:?} as url", arg),
+            Error::UnableToPerformRequest(e) => write!(f, "Unable to perform the request: {:?}", e),
+            Error::GenericError => write!(f, "Generic error"),
         }
     }
 }
 
-impl<'a> From<&'a str> for Error<'a> {
-    fn from(arg: &'a str) -> Self {
+impl From<String> for Error {
+    fn from(arg: String) -> Self {
         Error::UnableToParseArg(arg)
     }
 }
 
-impl<'a> From<Error<'a>> for String {
+impl From<Error> for String {
     fn from(e: Error) -> Self {
         e.to_string()
     }
