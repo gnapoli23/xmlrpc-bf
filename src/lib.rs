@@ -99,7 +99,7 @@ fn attack(username: &str, dict_chunk: &[String], url: &str) {
 pub fn main() {
     let args = CmdArgs::parse();
 
-    // Read the wordlist from the dictionary and divide it in chunks based on the calls_num parameter
+    // Read the wordlist from the dictionary and divide it in chunks
     let wordlist = read_dictionary(&args.dictionary).unwrap();
 
     thread::scope(|s| {
@@ -115,25 +115,4 @@ pub fn main() {
             let _ = t.join();
         }
     });
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::attack;
-
-    #[test]
-    fn test_attack() {
-        let username = "admin";
-        let url = "http://127.0.0.1:8080/xmlrpc.php";
-        let dict_chunk = &[
-            "test".to_owned(),
-            "test".to_owned(),
-            "test".to_owned(),
-            "administrator".to_owned(),
-            "test".to_owned(),
-            "test".to_owned(),
-        ];
-
-        println!("Test: {:?}", attack(username, dict_chunk, url));
-    }
 }
