@@ -4,7 +4,7 @@
 This is a simple implementation of an XML RPC API bruteforce tool that runs in multi-thread mode, and it's been inspired from this article: [Exploiting the XML RPC PHP on all Wordpress Versions](https://nitesculucian.github.io/2019/07/01/exploiting-the-xmlrpc-php-on-all-wordpress-versions/)
 
 
-XML RPC is Application Program Interface that allows users to execute remote procedure calls by using a simple `username` and `password` authentication. Usually these APIs are hidden due to malicious operations executable by an attacker but in many CMS like Wordpress they are active by default.
+XML RPC is an Application Program Interface that allows users to execute remote procedure calls by using a simple `username` and `password` authentication. Usually these APIs are hidden due to malicious operations executable by an attacker, but in many CMS like Wordpress they are active by default.
 
   
 
