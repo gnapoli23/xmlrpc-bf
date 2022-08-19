@@ -1,7 +1,7 @@
 
 ## XML RPC multi-threaded Bruteforce Tool
 
-This is a simple implementation of an XML RPC API bruteforce tool that runs in multi-thread mode, and it's been inspired from this article: [Exploiting the XML RPC PHP on all Wordpress Versions](https://nitesculucian.github.io/2019/07/01/exploiting-the-xmlrpc-php-on-all-wordpress-versions/)
+This is a simple implementation of an XML RPC API bruteforce tool that runs in multi-thread mode, and the inspiration comes from this article: [Exploiting the XML RPC PHP on all Wordpress Versions](https://nitesculucian.github.io/2019/07/01/exploiting-the-xmlrpc-php-on-all-wordpress-versions/)
 
 
 XML RPC is an Application Program Interface that allows users to execute remote procedure calls by using a simple `username` and `password` authentication. Usually these APIs are hidden due to malicious operations executable by an attacker, but in many CMS like Wordpress they are active by default.
@@ -57,8 +57,8 @@ OPTIONS:
 
 ## Improvements
 
-There are differente improvements that could be done:
-- use of `system.multicall` instead of sending `n` single request. The initial implementation of the tool was based on this particulare RPC API but during development i found that it was difficult to share information info about a possible match found. The crate `xmlrpc` on which this tool is based unfortunately does not provide a mean to map each request sent through `system.multicall` to its relative response.
+There are different improvements that could be done:
+- use of `system.multicall` instead of sending `n` single request. The initial implementation of the tool was based on this particular RPC API but during development i found that it was difficult to share information info about a possible match found. The crate `xmlrpc` on which this tool is based unfortunately does not provide a mean to map each request sent through `system.multicall` to its relative response.
 - add an optional argument to run the requests through TOR Network
 - add cli auto-completion using [clap_complete](https://crates.io/crates/clap_complete)
 - add file reading also for target username
